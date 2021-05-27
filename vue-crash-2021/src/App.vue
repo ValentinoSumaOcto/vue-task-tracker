@@ -1,49 +1,54 @@
 <template>
   <div class="container">
     <Header title="Task Tracker" />
-    <Tasks :tasks="tasks"/>
+    <Tasks @delete-task="deleteTask" :tasks="tasks" />
   </div>
 </template>
 
 <script>
-import Header from './components/Header'
-import Tasks from './components/Tasks'
+import Header from "./components/Header";
+import Tasks from "./components/Tasks";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     Header,
-    Tasks
+    Tasks,
   },
   data() {
     return {
-      tasks: [
-        
-      ]
-    }
+      tasks: [],
+    };
+  },
+  methods: {
+    deleteTask(id) {
+      // console.log('task', id)
+      if (confirm("Are you sure?")) {
+        this.tasks = this.tasks.filter((task) => task.id !== id);
+      }
+    },
   },
   created() {
     this.tasks = [
       {
-      id: 1,
-      text: "Doctors Appointment",
-      day: "June 6th at 2:30pm",
-      reminder: true
-    },
-    {
-      id: 2,
-      text: "Meeting",
-      day: "June 10th at 11:30am",
-      reminder: false
-    }
-    ]
-  }
-}
+        id: 1,
+        text: "Doctors Appointment",
+        day: "June 6th at 2:30pm",
+        reminder: true,
+      },
+      {
+        id: 2,
+        text: "Meeting",
+        day: "June 10th at 11:30am",
+        reminder: false,
+      },
+    ];
+  },
+};
 </script>
 
 <style>
-
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap");
 
 * {
   box-sizing: border-box;
@@ -52,7 +57,7 @@ export default {
 }
 
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 .container {
@@ -91,5 +96,4 @@ body {
   display: block;
   width: 100%;
 }
-
 </style>

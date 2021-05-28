@@ -35,14 +35,28 @@ export default {
     };
   },
   methods: {
-    addTask(newTask) {
-      this.tasks = [...this.tasks, newTask];
+    async addTask(task) {
+      //this.tasks = [...this.tasks, task];
+      const res = await fetch("api/tasks", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(task),
+      });
+      const data = await res.json();
+      this.tasks = [...this.tasks, data];
     },
 
-    deleteTask(id) {
+    async deleteTask(id) {
       // console.log('task', id)
       if (confirm("Are you sure?")) {
-        this.tasks = this.tasks.filter((task) => task.id !== id);
+        const res = await fetch(`api/tasks/${id}`, {
+          method: "DELETE",
+        });
+        res.status === 200
+          ? (this.tasks = this.tasks.filter((task) => task.id !== id))
+          : alert("Error deleting task");
       }
     },
 
@@ -62,10 +76,10 @@ export default {
       return data;
     },
     async fetchTask(id) {
-      const res = await fetch(`api/tasks/${id}`)
+      const res = await fetch(`api/tasks/${id}`);
       const data = await res.json();
       return data;
-    }
+    },
   },
   async created() {
     this.tasks = await this.fetchTasks();

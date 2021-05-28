@@ -1,6 +1,10 @@
 <template>
   <div class="container">
-    <Header title="Task Tracker" :showAddTask="showAddTask" @toggle-add-task="toggleAddTask" />
+    <Header
+      title="Task Tracker"
+      :showAddTask="showAddTask"
+      @toggle-add-task="toggleAddTask"
+    />
     <div v-if="showAddTask">
       <AddTask @add-task="addTask" />
     </div>
@@ -52,22 +56,19 @@ export default {
         task.id === id ? { ...task, reminder: !task.reminder } : task
       );
     },
+    async fetchTasks() {
+      const res = await fetch("api/tasks");
+      const data = await res.json();
+      return data;
+    },
+    async fetchTask(id) {
+      const res = await fetch(`api/tasks/${id}`)
+      const data = await res.json();
+      return data;
+    }
   },
-  created() {
-    this.tasks = [
-      {
-        id: 1,
-        text: "Doctors Appointment",
-        day: "June 6th at 2:30pm",
-        reminder: true,
-      },
-      {
-        id: 2,
-        text: "Meeting",
-        day: "June 10th at 11:30am",
-        reminder: false,
-      },
-    ];
+  async created() {
+    this.tasks = await this.fetchTasks();
   },
 };
 </script>
